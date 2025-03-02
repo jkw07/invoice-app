@@ -1,35 +1,35 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.scss";
+import { ROUTES } from "./config/routes";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+//TODO zm. browser router
+import "./styles/app.scss";
+import { MainHomePage } from "./pages/MainHomePage";
+import { InvoicesHomePage } from "./modules/invoices/pages/InvoicesHomePage";
+import { ProductsHomePage } from "./modules/products/pages/ProductsHomePage";
+import { ClientsHomePage } from "./modules/clients/pages/ClientsHomePage";
+import { RemindersHomePage } from "./modules/reminders/pages/RemindersHomePage";
+import { SettingsHomePage } from "./modules/settings/pages/SettingsHomePage";
+import { ReportsHomePage } from "./modules/reports/pages/ReporstHomePage";
+import { DashboardLayout } from "./layouts/DashboardLayout";
 
-function App() {
-  const [count, setCount] = useState(0);
-
+export const App = () => {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <Router>
+      <Routes>
+        <Route path={ROUTES.HOME} element={<MainHomePage />} />
+        <Route element={<DashboardLayout />}>
+          <Route path={ROUTES.INVOICES + "/*"} element={<InvoicesHomePage />} />
+          <Route path={ROUTES.PRODUCTS + "/*"} element={<ProductsHomePage />} />
+          <Route path={ROUTES.CLIENTS + "/*"} element={<ClientsHomePage />} />
+          <Route
+            path={ROUTES.REMINDERS + "/*"}
+            element={<RemindersHomePage />}
+          />
+          <Route path={ROUTES.SETTINGS + "/*"} element={<SettingsHomePage />} />
+          <Route path={ROUTES.REPORTS + "/*"} element={<ReportsHomePage />} />
+        </Route>
+      </Routes>
+    </Router>
   );
-}
+};
 
-export default App;
+//TODO dodac store i provider
