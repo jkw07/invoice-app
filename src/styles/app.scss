@@ -92,7 +92,11 @@
 
 .content {
   flex-grow: 1;
-  padding: 20px;
+  padding: 40px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .sidebar-logo {

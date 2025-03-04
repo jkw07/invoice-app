@@ -5,7 +5,7 @@ import {
   Users,
   Bell,
   Settings,
-  ChartArea,
+  ChartArea, LogOut
 } from "lucide-react";
 import { ROUTES } from "../config/routes";
 import logo from "../../public/assets/logo/logo6.png";
@@ -40,6 +40,10 @@ export const Sidebar = () => {
         <NavLink to={ROUTES.SETTINGS} className="sidebar-button">
           <Settings size={36} />
           <span className="sidebar-tooltip">Ustawienia</span>
+        </NavLink>
+        <NavLink to={ROUTES.HOME} className="sidebar-button">
+          <LogOut size={36} />
+          <span className="sidebar-tooltip">Wyloguj</span>
         </NavLink>
       </div>
     </nav>

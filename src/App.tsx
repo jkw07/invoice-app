@@ -1,4 +1,5 @@
 import { ROUTES } from "./config/routes";
+import {paths} from "./utils/paths"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 //TODO zm. browser router
 import "./styles/app.scss";
@@ -15,20 +16,20 @@ export const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path={ROUTES.HOME} element={<MainHomePage />} />
+        <Route path={paths.HOME} element={<MainHomePage />} />
         <Route element={<DashboardLayout />}>
-          <Route path={ROUTES.INVOICES + "/*"} element={<InvoicesHomePage />} />
-          <Route path={ROUTES.PRODUCTS + "/*"} element={<ProductsHomePage />} />
-          <Route path={ROUTES.CLIENTS + "/*"} element={<ClientsHomePage />} />
+          <Route path={paths.INVOICES} element={<InvoicesHomePage />} />
+          <Route path={paths.PRODUCTS} element={<ProductsHomePage />} />
+          <Route path={paths.CLIENTS} element={<ClientsHomePage />} />
           <Route
-            path={ROUTES.REMINDERS + "/*"}
+            path={ROUTES.REMINDERS}
             element={<RemindersHomePage />}
           />
-          <Route path={ROUTES.SETTINGS + "/*"} element={<SettingsHomePage />} />
-          <Route path={ROUTES.REPORTS + "/*"} element={<ReportsHomePage />} />
+          <Route path={paths.SETTINGS} element={<SettingsHomePage />} />
+          <Route path={paths.REPORTS} element={<ReportsHomePage />} />
         </Route>
       </Routes>
-    </Router>
+    </Router> 
   );
 };
 
