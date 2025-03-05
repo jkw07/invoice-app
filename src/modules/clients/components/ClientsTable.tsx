@@ -106,7 +106,7 @@ export const ClientsTable = () => {
           columnHeaderSortIconLabel: "Sortuj",
           footerRowSelected: (count) =>
             count !== 1
-              ? `${count.toLocaleString()} wiersz`
+              ? `${count.toLocaleString()} wierszy`
               : `${count.toLocaleString()} wiersz`,
           footerTotalRows: "Suma wierszy:",
           checkboxSelectionHeaderName: "Checkbox",
