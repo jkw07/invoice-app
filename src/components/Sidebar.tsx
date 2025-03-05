@@ -5,10 +5,11 @@ import {
   Users,
   Bell,
   Settings,
-  ChartArea, LogOut
+  ChartArea,
+  LogOut,
 } from "lucide-react";
 import { ROUTES } from "../config/routes";
-import logo from "../../public/assets/logo/logo6.png";
+import logo from "../../public/assets/logo/logo1sidebar.png";
 
 export const Sidebar = () => {
   return (

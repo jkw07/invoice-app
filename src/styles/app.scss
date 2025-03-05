@@ -1,12 +1,18 @@
 @use 'variables' as *;
 
 #root {
-  font-family: 'Russo One', sans-serif;
+  font-family: "Russo One", sans-serif;
   color: $text-color;
   background-color: $primary-background-color;
   text-align: center;
 }
 
+.app {
+  margin-top: 40px;
+  h1 {
+    font-size: 48px;
+  }
+}
 .main-logo {
    animation: slideInFromBottom 2s ease-out;
 }
@@ -24,24 +30,25 @@
 
 .dashboard-container {
   display: flex;
-  height: 100vh;
+  min-height: 100vh;
+  height: fit-content;
 }
 
 .sidebar {
-  width: 100px;
-  background: $logo-dark-green;
+  width: 130px;
+  background: $logo-dark-blue;
   color: $primary-background-color;
   padding: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .sidebar-nav {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 20px;
 }
 
 .sidebar-button {
@@ -53,7 +60,7 @@
   height: 70px;
   border: none;
   background: none;
-  color: #333;
+  color: $primary-background-color;
   border-radius: 10px;
   cursor: pointer;
   transition: background 0.3s ease;
@@ -64,7 +71,7 @@
 }
 
 .sidebar-button.active {
-  background: #356134;
+  background: $primary-blue;
   color: white;
 }
 
@@ -72,7 +79,7 @@
 .sidebar-tooltip {
   position: absolute;
   left: 60px;
-  background: $sidebar-button-green;
+  background: $logo-light-blue;
   color: $primary-background-color;
   padding: 5px 10px;
   border-radius: 5px;
@@ -105,4 +112,15 @@
   img {
     width: 100%;
   }
+}
+
+.login-form {
+  border: 4px solid $logo-dark-blue;
+  padding: 20px;
+  width: fit-content;
+  min-height: 150px;
+  margin: 20px auto;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
 }

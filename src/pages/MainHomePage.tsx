@@ -1,32 +1,18 @@
-import logo from "../../public/assets/logo/logo2.png";
-//import { useNavigation } from "../hooks/useNavigation";
+import logo from "../../public/assets/logo/logo1mini.png";
+import { useNavigation } from "../hooks/useNavigation";
+import { LoginForm } from "../components/LoginForm";
 
 export const MainHomePage = () => {
-  //const { goToInvoicesModule } = useNavigation();
-  const handleAddClient = () => {
-    if (!window.api || !window.api.createClient) {
-      console.error("window.api.createClient is not defined!");
-      return;
-    }
-    window.api.createClient(
-      "Jan Kowalski",
-      "ul. Nowa 10, 00-00 Kraków",
-      "jan@example.com",
-      "123456789",
-      1
-    );
-    setTimeout(async () => {
-      const updatedClients = await window.api.getClients();
-      console.log("Lista klientów po dodaniu:", updatedClients);
-    }, 500);
-  };
+  const { goToInvoicesModule } = useNavigation();
   return (
     <div className="app">
       <div className="main-logo">
         <img src={logo} alt="logo"></img>
       </div>
+      <h1>Faktury</h1>
       <div className="login-container">
-        <div onClick={handleAddClient}>Logowanie....(click)</div>
+        <div onClick={goToInvoicesModule}>Logowanie....(click)</div>
+        <LoginForm />
       </div>
     </div>
   );

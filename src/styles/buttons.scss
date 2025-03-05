@@ -1,0 +1,16 @@
+@use 'variables' as *;
+
+.default-button {
+    background: $primary-blue;
+    color: $primary-background-color;
+    display: flex;
+    justify-content:space-around; 
+    align-items:center;
+    gap: 8px;                
+    padding: 6px 16px;       
+    font-size: 16px; 
+    border-radius: 10px;
+    min-width: 140px;
+    height: 40px;
+    font-weight: bold;
+}

@@ -1,3 +1,9 @@
 export const NewClient = () => {
-    return <h1>Nowy Klient</h1>
+    return (
+    <>
+    <h2>Nowy Klient</h2>
+    <div className="new-client-actions-container">
+        
+    </div>
+    </>)
 }

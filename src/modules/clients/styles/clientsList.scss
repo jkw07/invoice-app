@@ -1,0 +1,24 @@
+
+.clients-actions-container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.clients-table-container {
+    .edit-button {
+        color: green;
+    }
+    .delete-button {
+        color: rgb(233, 63, 63);
+    }
+}
+
+.add-new-button {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.add-new-button:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
