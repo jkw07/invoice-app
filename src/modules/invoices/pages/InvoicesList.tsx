@@ -4,7 +4,7 @@ export const InvoicesList = () => {
   const { goToNewInvoice } = useInvoicesNavigation();
   return (
     <>
-      <h2>Lista faktur</h2>
+      <h1>Lista faktur</h1>
       <button onClick={goToNewInvoice}>Dodaj nową fakturę</button>
     </>
   );

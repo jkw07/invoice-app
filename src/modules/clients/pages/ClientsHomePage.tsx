@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { NewClient } from "./NewClient";
-import {ClientsList} from "./ClientsList";
+import { ClientsList } from "./ClientsList";
 
 export const ClientsHomePage = () => {
   return (
@@ -12,4 +12,4 @@ export const ClientsHomePage = () => {
       </Routes>
     </>
   );
-}
+};

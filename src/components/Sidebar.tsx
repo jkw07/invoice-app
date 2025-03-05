@@ -32,7 +32,7 @@ export const Sidebar = () => {
         </NavLink>
         <NavLink to={ROUTES.REMINDERS} className="sidebar-button">
           <Bell size={36} />
-          <span className="sidebar-tooltip">Przypomnienia</span>
+          <span className="sidebar-tooltip">Powiadomienia</span>
         </NavLink>
         <NavLink to={ROUTES.REPORTS} className="sidebar-button">
           <ChartArea size={36} />
