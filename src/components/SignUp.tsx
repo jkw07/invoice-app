@@ -1,6 +1,6 @@
 import { TextField } from "@mui/material";
 
-export const RegisterForm = () => {
+export const SignUp = () => {
   return (
     <div className="login-form">
       <TextField id="login" label="login" variant="outlined" required />;
