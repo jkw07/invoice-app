@@ -8,17 +8,28 @@ import {
   Checkbox,
   FormControlLabel,
   Link,
+  Divider,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
 import { useNavigation } from "../hooks/useNavigation";
 import logo from "../../public/assets/logo/logo1mini.png";
+import { ForgotPassword } from "./ForgotPassword";
 
 export const SignIn = () => {
   const [loginData, setLoginData] = useState({ login: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [open, setOpen] = useState(false);
   const { goToClientsModule } = useNavigation();
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLoginData({ ...loginData, [e.target.name]: e.target.value });
@@ -38,7 +49,7 @@ export const SignIn = () => {
     <Container component="main" maxWidth="xs">
       <Box
         sx={{
-          marginTop: 8,
+          marginTop: 2,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -103,12 +114,20 @@ export const SignIn = () => {
           >
             Zaloguj
           </Button>
+          <Link
+            component="button"
+            type="button"
+            onClick={handleClickOpen}
+            variant="body2"
+            sx={{ alignSelf: "baseline" }}
+          >
+            Przypomnij hasło
+          </Link>
+          <ForgotPassword open={open} handleClose={handleClose} />
           <div className="links-container">
+            <Divider>Nie masz jeszcze konta?</Divider>
             <Link href="#" variant="body2">
-              Przypomnij hasło
-            </Link>
-            <Link href="#" variant="body2">
-              {"Nie masz jeszcze konta? Zarejestruj się"}
+              {"Zarejestruj się"}
             </Link>
           </div>
         </Box>
