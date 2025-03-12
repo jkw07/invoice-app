@@ -1,4 +1,3 @@
-import { ROUTES } from "./config/routes";
 import { paths } from "./utils/paths";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 //TODO zm. browser router
@@ -25,7 +24,7 @@ export const App = () => {
             <Route path={paths.CLIENTS} element={<ClientsHomePage />} />
             <Route path={paths.INVOICES} element={<InvoicesHomePage />} />
             <Route path={paths.PRODUCTS} element={<ProductsHomePage />} />
-            <Route path={ROUTES.REMINDERS} element={<RemindersHomePage />} />
+            <Route path={paths.REMINDERS} element={<RemindersHomePage />} />
             <Route path={paths.SETTINGS} element={<SettingsHomePage />} />
             <Route path={paths.REPORTS} element={<ReportsHomePage />} />
           </Route>

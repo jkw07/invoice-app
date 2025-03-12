@@ -1,3 +1,7 @@
 export const NewInvoice = () => {
-  return <h2>Nowa faktura</h2>;
+  return (
+    <div>
+      <h1>Faktury</h1>
+    </div>
+  );
 };

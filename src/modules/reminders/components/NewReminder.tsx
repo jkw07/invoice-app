@@ -15,6 +15,7 @@ export const NewReminder = () => {
       localeText={
         plPL.components.MuiLocalizationProvider.defaultProps.localeText
       }
+      adapterLocale="de"
     >
       <DemoContainer components={["DateTimePicker", "DateTimePicker"]}>
         <DateTimePicker
@@ -22,7 +23,7 @@ export const NewReminder = () => {
           value={value}
           onChange={(newValue) => setValue(newValue)}
           views={["day", "month", "year", "hours", "minutes", "seconds"]}
-          format="LLL"
+          format="DD-MM-YYYY HH:MM"
           localeText={
             plPL.components.MuiLocalizationProvider.defaultProps.localeText
           }

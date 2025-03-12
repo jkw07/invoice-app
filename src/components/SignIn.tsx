@@ -15,34 +15,51 @@ import { useState } from "react";
 import { useNavigation } from "../hooks/useNavigation";
 import logo from "../../public/assets/logo/logo1mini.png";
 import { ForgotPassword } from "./ForgotPassword";
+import { SignUp } from "./SignUp";
+import { loginUser } from "../services/authService";
 
 export const SignIn = () => {
-  const [loginData, setLoginData] = useState({ login: "", password: "" });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-  const [open, setOpen] = useState(false);
-  const { goToClientsModule } = useNavigation();
+  const [forgotPasswordDialogOpen, setForgotPasswordDialogOpen] =
+    useState(false);
+  const [signUpOpen, setSignUpOpen] = useState(false);
+  const { goToInvoicesModule } = useNavigation();
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleOpenPasswordReminder = () => {
+    setForgotPasswordDialogOpen(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleClosePasswordReminder = () => {
+    setForgotPasswordDialogOpen(false);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLoginData({ ...loginData, [e.target.name]: e.target.value });
+  const handleOpenSignUp = () => {
+    setSignUpOpen(true);
+  };
+
+  const handleCloseSignUp = () => {
+    setSignUpOpen(false);
   };
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
   };
 
+  const handleLogin = async () => {
+    try {
+      await loginUser(email, password);
+      goToInvoicesModule();
+    } catch (error) {
+      console.error("Login failed: ", error);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Logowanie:", loginData);
-    goToClientsModule();
+    handleLogin();
   };
 
   return (
@@ -62,15 +79,16 @@ export const SignIn = () => {
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
           <TextField
             required
-            label="Login"
+            label="Email"
             margin="normal"
-            name="login"
+            name="email"
             variant="outlined"
             fullWidth
             autoComplete="email"
+            type="email"
             autoFocus
-            value={loginData.login}
-            onChange={handleChange}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
 
           <TextField
@@ -82,8 +100,8 @@ export const SignIn = () => {
             autoComplete="current-password"
             required
             fullWidth
-            value={loginData.password}
-            onChange={handleChange}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             slotProps={{
               input: {
                 endAdornment: (
@@ -114,21 +132,33 @@ export const SignIn = () => {
           >
             Zaloguj
           </Button>
+        </Box>
+        <Box sx={{ mt: 1 }}>
           <Link
             component="button"
             type="button"
-            onClick={handleClickOpen}
+            onClick={handleOpenPasswordReminder}
             variant="body2"
-            sx={{ alignSelf: "baseline" }}
+            sx={{ alignSelf: "center" }}
           >
             Przypomnij hasło
           </Link>
-          <ForgotPassword open={open} handleClose={handleClose} />
+          <ForgotPassword
+            open={forgotPasswordDialogOpen}
+            handleClose={handleClosePasswordReminder}
+          />
           <div className="links-container">
             <Divider>Nie masz jeszcze konta?</Divider>
-            <Link href="#" variant="body2">
-              {"Zarejestruj się"}
+            <Link
+              component="button"
+              type="button"
+              onClick={handleOpenSignUp}
+              variant="body2"
+              sx={{ alignSelf: "center" }}
+            >
+              Zarejestruj się
             </Link>
+            <SignUp open={signUpOpen} handleClose={handleCloseSignUp} />
           </div>
         </Box>
       </Box>

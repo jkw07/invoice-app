@@ -1,10 +1,13 @@
+import { deleteClient, updateClient } from "../../../services/clientService";
+import { Client } from "../types";
+
 export function useClientsActions() {
-    const handleEdit = (id: number) => {
-  console.log(id);
+  const handleEdit = (id: string, newData: Partial<Client>) => {
+  updateClient(id, newData);
 };
 
-const handleDelete = (id: number) => {
-  console.log(id);
+const handleDelete = (id: string) => {
+  deleteClient(id);
 };
     return {handleEdit, handleDelete}
 }

@@ -1,36 +1,41 @@
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { plPL } from "@mui/x-data-grid/locales";
-import {
-  clientsData,
-  Client,
-} from "../../../tempDatabase/temporaryClientsData";
 import { TextField, Box, InputAdornment } from "@mui/material";
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { TableCols } from "./tableCols";
-import { useClientsTableStore } from "../state/tableState";
+import { useClientsTableStore } from "../store/tableStore";
 import { filterData } from "../../../utils/filterData";
+import { getClients } from "../../../services/clientService";
+import { Client } from "../types";
 
 const columns = TableCols();
 
 export const ClientsTableGrid = () => {
   const [searchText, setSearchText] = useState<string>("");
-  const [filteredData, setFilteredData] = useState<Client[]>(clientsData);
+  const [filteredData, setFilteredData] = useState<Client[]>([]);
   const { isLoading, startLoading, stopLoading } = useClientsTableStore();
 
   useEffect(() => {
-    startLoading();
-    const timer = setTimeout(() => {
-      stopLoading();
-    }, 2000);
+    const fetchClients = async () => {
+      startLoading();
+      try {
+        const clients = await getClients();
+        setFilteredData(clients);
+      } catch (error) {
+        console.error("Error fetching clients:", error);
+      } finally {
+        stopLoading();
+      }
+    };
 
-    return () => clearTimeout(timer);
-  }, []);
+    fetchClients();
+  }, [startLoading, stopLoading]);
 
   function handleSearchChange(event: React.ChangeEvent<HTMLInputElement>) {
     const query = event.target.value;
     setSearchText(query);
-    const filtered = filterData(clientsData, query);
+    const filtered = filterData(filteredData, query);
     setFilteredData(filtered);
   }
 
