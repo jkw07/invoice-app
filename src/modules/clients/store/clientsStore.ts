@@ -17,9 +17,21 @@ interface ClientsStore {
   setFilteredData: (filtered: Client[]) => void;
   setSearchText: (text: string) => void;
   deleteClientsData: (clientId: string) => void;
+  newClientData: Client;
+  setNewClientData: (client: Client) => void;
+  resetNewClientData: () => void;
+  setImportedClientData: (client: Client) => void;
 }
 
 export const useClientsStore = create<ClientsStore>((set) => ({
+  newClientData: {
+    id: "",
+    name: "",
+    taxId: "",
+    address: "",
+    email: "",
+    phone: "",
+  },
   clientsData: [],
   filteredData: [],
   searchText: '',
@@ -30,4 +42,16 @@ export const useClientsStore = create<ClientsStore>((set) => ({
     const updatedClients = state.clientsData.filter(client => client.id !== clientId);
     return { clientsData: updatedClients, filteredData: updatedClients };
   }),
+  setNewClientData: (client) => set((state) => ({
+      newClientData: { ...state.newClientData, ...client },
+    })),
+  resetNewClientData: () => set({newClientData: {
+    id: "",
+    name: "",
+    taxId: "",
+    address: "",
+    email: "",
+    phone: "",
+  }}),
+  setImportedClientData: (client) => set({newClientData: client})
 }));

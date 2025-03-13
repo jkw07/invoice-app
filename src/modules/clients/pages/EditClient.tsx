@@ -35,7 +35,6 @@ export const EditClient = () => {
   };
 
   useEffect(() => {
-    console.log(clientId);
     if (!clientId) return;
     const fetchClientData = async () => {
       setIsLoading(true);
@@ -43,7 +42,6 @@ export const EditClient = () => {
       try {
         const data = await getClientById(clientId);
         if (data && !Array.isArray(data)) {
-          console.log("Pobrane dane klienta:", data);
           setFormData(data as Client);
         } else {
           setOpenDialog(true);
@@ -51,7 +49,7 @@ export const EditClient = () => {
           setAlertMessage("Nie znaleziono klienta.");
         }
       } catch (error) {
-        console.log(error);
+        console.error("Error fetching client:", error);
         setOpenDialog(true);
         setAlertSeverity("error");
         setAlertMessage("Wystąpił błąd podczas pobierania danych.");

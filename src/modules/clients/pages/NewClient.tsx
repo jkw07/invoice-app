@@ -6,71 +6,64 @@ import "../../../styles/buttons.scss";
 import { AlertDialog } from "../../../components/AlertDialog";
 import Button from "@mui/material/Button";
 import { ClientForm } from "../components/ClientForm";
-
-interface NewClient {
-  name: string;
-  taxId: string;
-  address: string;
-  email: string;
-  phone: string;
-}
+import { ImportClient } from "../components/ImportClient";
+import { useClientsStore } from "../store/clientsStore";
 
 export const NewClient = () => {
-  const [formData, setFormData] = useState<NewClient>({
-    name: "",
-    taxId: "",
-    address: "",
-    email: "",
-    phone: "",
-  });
+  const { newClientData, setNewClientData, resetNewClientData } =
+    useClientsStore();
+
   const [openDialog, setOpenDialog] = useState(false);
+  const [openImportClientDialog, setOpenImportClientDialog] = useState(true);
   const [alertSeverity, setAlertSeverity] = useState<AlertColor | undefined>(
     undefined
   );
   const [alertMessage, setAlertMessage] = useState("");
 
-  const handleReset = () => {
-    setFormData({ name: "", taxId: "", address: "", email: "", phone: "" });
-  };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    setNewClientData({ ...newClientData, [name]: value });
   };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await addClient(formData);
+      await addClient(newClientData);
       setAlertSeverity("success");
       setAlertMessage("Klient został dodany pomyślnie.");
     } catch (error) {
       setAlertSeverity("error");
       setAlertMessage("Wystąpił błąd podczas dodawania klienta.");
-      console.log(error);
+      console.error("Error adding client:", error);
     } finally {
       setOpenDialog(true);
     }
 
-    handleReset();
+    resetNewClientData();
   };
 
   const handleDialogClose = () => {
     setOpenDialog(false);
   };
+
+  const handleCloseImportClient = () => {
+    setOpenImportClientDialog(false);
+  };
+
   return (
     <>
       <h2>Nowy Klient</h2>
       <NavLink to="/clients" className="link-button">
         <Button>Powrót</Button>
       </NavLink>
+      <ImportClient
+        open={openImportClientDialog}
+        handleClose={handleCloseImportClient}
+      />
       <ClientForm
-        formData={formData}
+        formData={newClientData}
         handleSubmit={handleSubmit}
         handleChange={handleChange}
-        handleReset={handleReset}
+        handleReset={resetNewClientData}
         hasReset={true}
       />
       <AlertDialog
