@@ -1,10 +1,14 @@
 import { IconButton, Tooltip } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import { Edit, Trash2 } from "lucide-react";
-import { useClientsActions } from "../hooks/useClientsActions";
 
-export const TableCols = () => {
-  const { handleDelete, handleEdit } = useClientsActions();
+export const tableCols = ({
+  handleDeleteClient,
+  handleGoToEditClientForm,
+}: {
+  handleDeleteClient: (id: string) => void;
+  handleGoToEditClientForm: (id: string) => void;
+}) => {
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 100 },
     {
@@ -47,7 +51,7 @@ export const TableCols = () => {
           >
             <Tooltip title="Edytuj">
               <IconButton
-                onClick={() => handleEdit(params.row.id)}
+                onClick={() => handleGoToEditClientForm(params.row.id)}
                 aria-label="Edit"
               >
                 <Edit className="edit-button" />
@@ -55,7 +59,7 @@ export const TableCols = () => {
             </Tooltip>
             <Tooltip title="Usuń">
               <IconButton
-                onClick={() => handleDelete(params.row.id)}
+                onClick={() => handleDeleteClient(params.row.id)}
                 aria-label="Delete"
               >
                 <Trash2 className="delete-button" />

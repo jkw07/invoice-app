@@ -3,6 +3,7 @@ import { ClientsTableGrid } from "../components/ClientsTableGrid";
 import { UserRoundPlus } from "lucide-react";
 import "../styles/clientsList.scss";
 import { NavLink } from "react-router-dom";
+import { SearchInput } from "../components/SearchInput";
 
 export const ClientsList = () => {
   return (
@@ -16,6 +17,7 @@ export const ClientsList = () => {
         </NavLink>
       </div>
       <div className="clients-table-container">
+        <SearchInput/>
         <ClientsTableGrid />
       </div>
     </>

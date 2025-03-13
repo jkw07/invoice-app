@@ -1,4 +1,4 @@
-import { collection, addDoc, getDocs, query, where, deleteDoc, doc, updateDoc} from "firebase/firestore";
+import { collection, addDoc, getDocs, query, where, deleteDoc, doc, updateDoc, getDoc} from "firebase/firestore";
 import { db } from "./firebaseConfig";
 import { getAuth } from "firebase/auth";
 import { Client } from "../modules/clients/types";
@@ -40,6 +40,33 @@ export const getClients = async () => {
   } catch (error) {
     console.error("Error getting clients: ", error);
     return [];
+  }
+};
+
+export const getClientById = async (clientId: string) => {
+  const user = auth.currentUser;
+  if (!user) return [];
+  try {
+    const docRef = doc(clientsCollection, clientId);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      return {
+        id: docSnap.id,
+        name: data.name || "",
+        taxId: data.taxId || "",
+        address: data.address || "",
+        email: data.email || "",
+        phone: data.phone || "",
+      };
+    } else {
+      console.error("No such document!");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error getting client by id: ", error);
+    return null;
   }
 };
 

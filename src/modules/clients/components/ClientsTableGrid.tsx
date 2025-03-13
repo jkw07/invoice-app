@@ -1,68 +1,51 @@
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { plPL } from "@mui/x-data-grid/locales";
-import { TextField, Box, InputAdornment } from "@mui/material";
-import { Search } from "lucide-react";
+import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
-import { TableCols } from "./tableCols";
-import { useClientsTableStore } from "../store/tableStore";
+import { tableCols } from "./tableCols";
 import { filterData } from "../../../utils/filterData";
 import { getClients } from "../../../services/clientService";
-import { Client } from "../types";
-
-const columns = TableCols();
+import { useClientsStore } from "../store/clientsStore";
+import { useClientsActions } from "../hooks/useClientsActions";
 
 export const ClientsTableGrid = () => {
-  const [searchText, setSearchText] = useState<string>("");
-  const [filteredData, setFilteredData] = useState<Client[]>([]);
-  const { isLoading, startLoading, stopLoading } = useClientsTableStore();
+  const { handleDeleteClient, handleGoToEditClientForm } = useClientsActions();
+  const columns = tableCols({ handleDeleteClient, handleGoToEditClientForm });
+  const {
+    clientsData,
+    filteredData,
+    searchText,
+    setFilteredData,
+    setClientsData,
+  } = useClientsStore();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchClients = async () => {
-      startLoading();
+      setIsLoading(true);
       try {
         const clients = await getClients();
-        setFilteredData(clients);
+        setClientsData(clients);
       } catch (error) {
         console.error("Error fetching clients:", error);
       } finally {
-        stopLoading();
+        setIsLoading(false);
       }
     };
-
     fetchClients();
-  }, [startLoading, stopLoading]);
+  }, [setClientsData]);
 
-  function handleSearchChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const query = event.target.value;
-    setSearchText(query);
-    const filtered = filterData(filteredData, query);
-    setFilteredData(filtered);
-  }
+  useEffect(() => {
+    if (searchText.trim() === "") {
+      setFilteredData(clientsData);
+    } else {
+      const filtered = filterData(clientsData, searchText);
+      setFilteredData(filtered);
+    }
+  }, [searchText, clientsData, setFilteredData]);
 
   return (
     <>
-      <TextField
-        label="Szukaj"
-        variant="outlined"
-        fullWidth
-        value={searchText}
-        onChange={handleSearchChange}
-        sx={{
-          marginBottom: 2,
-          width: "100%",
-          background: "white",
-          marginTop: 2,
-        }}
-        slotProps={{
-          input: {
-            startAdornment: (
-              <InputAdornment position="start">
-                <Search size={20} />
-              </InputAdornment>
-            ),
-          },
-        }}
-      />
       <Box sx={{ width: "100%", background: "white" }}>
         <DataGrid
           rows={filteredData}
