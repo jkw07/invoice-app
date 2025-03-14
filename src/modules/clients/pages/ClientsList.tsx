@@ -8,9 +8,7 @@ import { SearchInput } from "../components/SearchInput";
 export const ClientsList = () => {
   return (
     <>
-      <div className="clients-list-header">
         <h1>Lista klientów</h1>
-      </div>
       <div className="clients-actions-container">
         <NavLink to="/clients/new" className="link-button">
           <DefaultButton text="Dodaj klienta" icon={<UserRoundPlus />} />

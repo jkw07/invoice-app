@@ -64,17 +64,20 @@ export const ImportClient = ({ open, handleClose }: ImportClientProps) => {
       if (response.status === 401) {
         setAlertSeverity("error");
         setAlertMessage("Błąd autoryzacji. Sprawdź poprawność klucza API.");
+        setOpenAlert(true);
         throw new Error("Unauthorized: Invalid API key");
       }
 
       if (response.status === 403) {
         setAlertSeverity("error");
         setAlertMessage("Brak uprawnień do dostępu do API.");
+        setOpenAlert(true);
         throw new Error("Forbidden: No access to the API");
       }
       if (!response.ok) {
         setAlertSeverity("error");
         setAlertMessage("Nie znaleziono klienta");
+        setOpenAlert(true);
         throw new Error("Client not found");
       }
       const data = await response.json();
@@ -93,12 +96,15 @@ export const ImportClient = ({ open, handleClose }: ImportClientProps) => {
         setAlertMessage(
           "Błąd połączenia: problem z CORS lub API jest niedostępne."
         );
+        setOpenAlert(true);
       } else {
         setAlertSeverity("error");
         if (error instanceof Error) {
           setAlertMessage(error.message);
+          setOpenAlert(true);
         } else {
           setAlertMessage("An unknown error occurred");
+          setOpenAlert(true);
         }
       }
     }
@@ -110,13 +116,11 @@ export const ImportClient = ({ open, handleClose }: ImportClientProps) => {
     await fetchClientData(nipValue);
     setImportedClientData(clientData);
     setLoading(false);
-    setAlertSeverity("success");
-    setAlertMessage("Klient został dodany pomyślnie.");
+    handleClose();
   };
 
   const handleAlertClose = () => {
     setOpenAlert(false);
-    handleClose();
   };
 
   return (

@@ -20,6 +20,7 @@ export const ClientsTableGrid = () => {
   } = useClientsStore();
   const [isLoading, setIsLoading] = useState(false);
 
+
   useEffect(() => {
     const fetchClients = async () => {
       setIsLoading(true);
