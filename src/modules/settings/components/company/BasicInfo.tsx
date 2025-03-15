@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -20,19 +21,30 @@ export const BasicInfo = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState(companyData);
   const [alertOpen, setAlertOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchCompany = async () => {
-      const companies = await getCompany();
-      if (companies.length > 0) {
-        setCompanyData(companies[0]);
-      } else {
-        setAlertOpen(true);
+      if (companyData.id !== "") return;
+      setIsLoading(true);
+
+      try {
+        const companies = await getCompany();
+
+        if (companies.length > 0) {
+          setCompanyData(companies[0]);
+        } else {
+          setAlertOpen(true);
+        }
+      } catch (error) {
+        console.error("Error fetching company data:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchCompany();
-  }, [setCompanyData]);
+  }, [setCompanyData, companyData.id]);
 
   useEffect(() => {
     setFormData(companyData);
@@ -78,7 +90,12 @@ export const BasicInfo = () => {
 
   return (
     <Box>
-      <h3>Podstawowe dane</h3>
+      {isLoading && (
+        <Box sx={{ display: "flex" }}>
+          <CircularProgress />
+        </Box>
+      )}
+      <h3>Dane podstawowe</h3>
       {!isEditing && <Button onClick={handleEdit}>Edytuj</Button>}
       {isEditing && (
         <>
@@ -135,7 +152,7 @@ export const BasicInfo = () => {
       </Box>
 
       <Dialog open={alertOpen} onClose={() => setAlertOpen(false)}>
-        <DialogTitle>Brak danych firmy</DialogTitle>
+        <DialogTitle>Uzupełnij dane firmy</DialogTitle>
         <DialogContent>
           <TextField
             label="Nazwa firmy"

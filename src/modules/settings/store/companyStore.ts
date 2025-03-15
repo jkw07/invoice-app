@@ -9,8 +9,7 @@ interface CompanyStore {
 }
 
 export const useCompanyStore = create<CompanyStore>((set) => ({
-  companyData: {
-    id: "",
+  companyData: {id: "",
     fullName: "",
     shortName: "",
     taxId: "",
@@ -18,8 +17,7 @@ export const useCompanyStore = create<CompanyStore>((set) => ({
     zipCode: "",
     city: "",
     email: "",
-    phone: "",
-  },
+    phone: "",},
   setCompanyData: (company) => set({ companyData: company }),
   updateCompanyData: (company) => set((state) => ({
       companyData: { ...state.companyData, ...company },

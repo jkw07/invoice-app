@@ -5,6 +5,10 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import OutlinedInput from "@mui/material/OutlinedInput";
+import { useState } from "react";
+import { resetPassword } from "../services/authService";
+import { Alert } from "@mui/material";
+import { getAuth, fetchSignInMethodsForEmail } from "firebase/auth";
 
 interface ForgotPasswordProps {
   open: boolean;
@@ -12,10 +16,43 @@ interface ForgotPasswordProps {
 }
 
 export const ForgotPassword = ({ open, handleClose }: ForgotPasswordProps) => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    handleClose();
-  }
+    setMessage("");
+    setError("");
+    setLoading(true);
+
+    try {
+      const auth = getAuth();
+
+      const formattedEmail = email.trim().toLowerCase();
+      console.log("🔍 Sprawdzam e-mail:", formattedEmail);
+      const signInMethods = await fetchSignInMethodsForEmail(
+        auth,
+        formattedEmail
+      );
+      console.log("Metody logowania dla:", formattedEmail, signInMethods);
+
+      if (signInMethods.length === 0) {
+        throw new Error("auth/user-not-found");
+      }
+
+      await resetPassword(email);
+      setMessage("E-mail z linkiem do resetu hasła został wysłany.");
+    } catch (error: unknown) {
+      if (error instanceof Error && error.message === "auth/user-not-found") {
+        setError("Nie znaleziono użytkownika z tym adresem e-mail.");
+      } else {
+        setError("Wystąpił błąd. Spróbuj ponownie.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <Dialog
       open={open}
@@ -46,12 +83,15 @@ export const ForgotPassword = ({ open, handleClose }: ForgotPasswordProps) => {
           placeholder="Email"
           type="email"
           fullWidth
+          onChange={(e) => setEmail(e.target.value)}
         />
+        {message && <Alert severity="success">{message}</Alert>}
+        {error && <Alert severity="error">{error}</Alert>}
       </DialogContent>
       <DialogActions sx={{ pb: 3, px: 3 }}>
         <Button onClick={handleClose}>Anuluj</Button>
         <Button variant="contained" type="submit">
-          Kontunuuj
+          {loading ? "Wysyłanie..." : "Kontynuuj"}
         </Button>
       </DialogActions>
     </Dialog>

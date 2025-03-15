@@ -18,12 +18,15 @@ export const CompanySettings = () => {
           padding: 2,
         }}
       >
-        <Box sx={{ width: "300px" }}>
+        <Box
+          sx={{ width: "300px", textAlign: "left", alignItems: "flex-start" }}
+        >
           <h2>Dane Twojej Firmy</h2>
           <Button
             fullWidth
             variant={activeSection === "basic" ? "outlined" : "text"}
             onClick={() => handleButtonClick("basic")}
+            sx={{ justifyContent: "flex-start" }}
           >
             Dane podstawowe
           </Button>
@@ -31,7 +34,7 @@ export const CompanySettings = () => {
             fullWidth
             variant={activeSection === "address" ? "outlined" : "text"}
             onClick={() => handleButtonClick("address")}
-            sx={{ marginTop: 2 }}
+            sx={{ marginTop: 2, justifyContent: "flex-start" }}
           >
             Adres
           </Button>

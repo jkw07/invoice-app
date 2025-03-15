@@ -1,6 +1,5 @@
 import { paths } from "./utils/paths";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-//TODO zm. browser router
 import "./styles/app.scss";
 import { MainHomePage } from "./pages/MainHomePage";
 import { InvoicesHomePage } from "./modules/invoices/pages/InvoicesHomePage";
@@ -12,15 +11,24 @@ import { ReportsHomePage } from "./modules/reports/pages/ReportsHomePage";
 import { DashboardLayout } from "./layouts/DashboardLayout";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { plPL } from "@mui/material/locale";
+import { AuthListener } from "./services/AuthListener";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 export const App = () => {
   const theme = createTheme({}, plPL);
   return (
     <ThemeProvider theme={theme}>
       <Router>
+        <AuthListener />
         <Routes>
           <Route path={paths.HOME} element={<MainHomePage />} />
-          <Route element={<DashboardLayout />}>
+          <Route
+            element={
+              <ProtectedRoute>
+                <DashboardLayout />
+              </ProtectedRoute>
+            }
+          >
             <Route path={paths.CLIENTS} element={<ClientsHomePage />} />
             <Route path={paths.INVOICES} element={<InvoicesHomePage />} />
             <Route path={paths.PRODUCTS} element={<ProductsHomePage />} />
@@ -33,5 +41,3 @@ export const App = () => {
     </ThemeProvider>
   );
 };
-
-//TODO dodac store i provider
