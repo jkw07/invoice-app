@@ -14,7 +14,15 @@ export const addInvoice = async (invoice: { client: string; amount: number; date
       userId: user.uid,
     });
   } catch (error) {
-    console.error("Error adding invoice: ", error);
+    if (error instanceof Error) {
+      if (error.message.includes('Network')) {
+        console.error("Network error: Unable to reach the server.");
+      } else {
+        console.error("Error adding invoice: ", error.message);
+      }
+    } else {
+      console.error("Unknown error adding invoice", error);
+    }
   }
 };
 
@@ -29,7 +37,14 @@ export const getInvoices = async () => {
       ...doc.data(),
     }));
   } catch (error) {
-    console.error("Error getting invoices: ", error);
-    return [];
+    if (error instanceof Error) {
+      if (error.message.includes('Network')) {
+        console.error("Network error: Unable to reach the server.");
+      } else {
+        console.error("Error getting invoice: ", error.message);
+      }
+    } else {
+      console.error("Unknown error getting invoice", error);
+    }
   }
 };

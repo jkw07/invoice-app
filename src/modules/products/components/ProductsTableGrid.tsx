@@ -1,6 +1,6 @@
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { plPL } from "@mui/x-data-grid/locales";
-import { Box } from "@mui/material";
+import { Alert, Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import { filterData } from "../../../utils/filterData";
 import { getProducts } from "../../../services/productService";
@@ -23,6 +23,8 @@ export const ProductsTableGrid = () => {
     setProductsData,
   } = useProductsStore();
   const [isLoading, setIsLoading] = useState(false);
+  const [alert, setAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -31,7 +33,8 @@ export const ProductsTableGrid = () => {
         const products = await getProducts();
         setProductsData(products);
       } catch (error) {
-        console.error("Error fetching products:", error);
+        setAlert(true);
+        setAlertMessage("Wystąpił błąd podczas ładowania produktów.");
       } finally {
         setIsLoading(false);
       }
@@ -51,6 +54,7 @@ export const ProductsTableGrid = () => {
   return (
     <>
       <Box sx={{ width: "100%", background: "white" }}>
+        {alert && <Alert severity="error">{alertMessage}</Alert>}
         <DataGrid
           rows={filteredData}
           loading={isLoading}

@@ -18,6 +18,7 @@ import {
 } from "../../../services/companyService";
 import { useCompanyStore } from "../store/companyStore";
 import { ContactInfo } from "./company/ContactInfo";
+import { Seller } from "./company/Seller";
 
 export const CompanySettings = () => {
   const [activeSection, setActiveSection] = useState("basic");
@@ -107,6 +108,7 @@ export const CompanySettings = () => {
       },
       email: formData.email,
       phone: formData.phone,
+      seller: formData.seller,
     };
     await addCompany(newCompany);
     setCompanyData(newCompany);
@@ -157,6 +159,14 @@ export const CompanySettings = () => {
           >
             Dane kontaktowe
           </Button>
+          <Button
+            fullWidth
+            variant={activeSection === "seller" ? "outlined" : "text"}
+            onClick={() => handleButtonClick("seller")}
+            sx={{ marginTop: 2, justifyContent: "flex-start" }}
+          >
+            Dane sprzedawcy
+          </Button>
         </Box>
         <Divider orientation="vertical" flexItem sx={{ marginX: 2 }} />
         <Box sx={{ flex: 1, paddingLeft: 3 }}>
@@ -179,6 +189,14 @@ export const CompanySettings = () => {
           )}
           {activeSection === "contact" && (
             <ContactInfo
+              handleSave={handleSave}
+              handleCancel={handleCancel}
+              formData={formData}
+              handleChange={handleChange}
+            />
+          )}
+          {activeSection === "seller" && (
+            <Seller
               handleSave={handleSave}
               handleCancel={handleCancel}
               formData={formData}

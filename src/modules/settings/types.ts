@@ -16,4 +16,5 @@
   };
   email: string;
   phone: string;
+  seller: string;
   }

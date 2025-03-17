@@ -23,13 +23,24 @@ export const addProduct = async (product: {
       userId: user.uid,
     });
   } catch (error) {
-    console.error("Error adding product: ", error);
+    if (error instanceof Error) {
+      if (error.message.includes('Network')) {
+        console.error("Network error: Unable to reach the server.");
+      } else {
+        console.error("Error adding product: ", error.message);
+      }
+    } else {
+      console.error("Unknown error adding product", error);
+    }
   }
 };
 
 export const getProducts = async () => {
   const user = auth.currentUser;
-  if (!user) return [];
+  if (!user) {
+    console.error("User not logged in");
+    return [];
+  }
   try {
     const q = query(productsCollection, where("userId", "==", user.uid));
     const querySnapshot = await getDocs(q);
@@ -48,14 +59,25 @@ export const getProducts = async () => {
   };
 });
   } catch (error) {
-    console.error("Error getting products: ", error);
+    if (error instanceof Error) {
+      if (error.message.includes('Network')) {
+        console.error("Network error: Unable to fetch products.");
+      } else {
+        console.error("Error getting products: ", error.message);
+      }
+    } else {
+      console.error("Unknown error getting products", error);
+    }
     return [];
   }
 };
 
 export const getProductById = async (productId: string) => {
   const user = auth.currentUser;
-  if (!user) return [];
+  if (!user) {
+    console.error("User not logged in");
+    return [];
+  }
   try {
     const docRef = doc(productsCollection, productId);
     const docSnap = await getDoc(docRef);
@@ -74,11 +96,19 @@ export const getProductById = async (productId: string) => {
         grossUnitPrice: data.grossUnitPrice || 0,
       };
     } else {
-      console.error("No such document!");
+      console.error("Product not found with the provided ID");
       return null;
     }
   } catch (error) {
-    console.error("Error getting product by id: ", error);
+    if (error instanceof Error) {
+      if (error.message.includes('Network')) {
+        console.error("Network error: Unable to fetch product details.");
+      } else {
+        console.error("Error getting product by id: ", error.message);
+      }
+    } else {
+      console.error("Unknown error getting product by id", error);
+    }
     return null;
   }
 };
@@ -88,7 +118,15 @@ export const deleteProduct = async (productId: string) => {
     await deleteDoc(doc(db, "products", productId));
     console.log(`Product ID ${productId} has been deleted.`);
   } catch (error) {
-    console.error("Error deleting product:", error);
+    if (error instanceof Error) {
+      if (error.message.includes('Network')) {
+        console.error("Network error: Unable to delete product.");
+      } else {
+        console.error("Error deleting product:", error.message);
+      }
+    } else {
+      console.error("Unknown error deleting product", error);
+    }
   }
 };
 
@@ -98,6 +136,14 @@ export const updateProduct = async (productId: string, updatedData: Partial<Prod
     await updateDoc(productRef, updatedData);
     console.log(`Product ${productId} has beed updated.`);
   } catch (error) {
-    console.error("Error updating product:", error);
+    if (error instanceof Error) {
+      if (error.message.includes('Network')) {
+        console.error("Network error: Unable to update product.");
+      } else {
+        console.error("Error updating product:", error.message);
+      }
+    } else {
+      console.error("Unknown error updating product", error);
+    }
   }
 };

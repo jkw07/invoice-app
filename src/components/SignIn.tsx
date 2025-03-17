@@ -68,7 +68,7 @@ export const SignIn = () => {
       goToInvoicesModule();
     } catch (error) {
       console.error("Login failed: ", error);
-      setLoginAlert("Błąd logowania: nieprawidłowy email lub hasło");
+      setLoginAlert("Błąd logowania. Spróbuj ponownie.");
       setState({
         email: "",
         password: "",

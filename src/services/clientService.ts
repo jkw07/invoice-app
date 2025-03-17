@@ -16,13 +16,24 @@ export const addClient = async (client: { name: string; taxId: string; address: 
       userId: user.uid,
     });
   } catch (error) {
-    console.error("Error adding client: ", error);
+    if (error instanceof Error) {
+      if (error.message.includes('Network')) {
+        console.error("Network error: Unable to reach the server.");
+      } else {
+        console.error("Error adding client: ", error.message);
+      }
+    } else {
+      console.error("Unknown error adding client", error);
+    }
   }
 };
 
 export const getClients = async () => {
   const user = auth.currentUser;
-  if (!user) return [];
+  if (!user) {
+    console.error("User not logged in");
+    return [];
+  }
   try {
     const q = query(clientsCollection, where("userId", "==", user.uid));
     const querySnapshot = await getDocs(q);
@@ -38,14 +49,25 @@ export const getClients = async () => {
   };
 });
   } catch (error) {
-    console.error("Error getting clients: ", error);
+    if (error instanceof Error) {
+      if (error.message.includes('Network')) {
+        console.error("Network error: Unable to fetch clients.");
+      } else {
+        console.error("Error getting clients: ", error.message);
+      }
+    } else {
+      console.error("Unknown error getting clients", error);
+    }
     return [];
   }
 };
 
 export const getClientById = async (clientId: string) => {
   const user = auth.currentUser;
-  if (!user) return [];
+  if (!user) {
+    console.error("User not logged in");
+    return [];
+  }
   try {
     const docRef = doc(clientsCollection, clientId);
     const docSnap = await getDoc(docRef);
@@ -61,11 +83,19 @@ export const getClientById = async (clientId: string) => {
         phone: data.phone || "",
       };
     } else {
-      console.error("No such document!");
+      console.error("Client not found with the provided ID");
       return null;
     }
   } catch (error) {
-    console.error("Error getting client by id: ", error);
+    if (error instanceof Error) {
+      if (error.message.includes('Network')) {
+        console.error("Network error: Unable to fetch client details.");
+      } else {
+        console.error("Error getting client by id: ", error.message);
+      }
+    } else {
+      console.error("Unknown error getting client by id", error);
+    }
     return null;
   }
 };
@@ -75,7 +105,15 @@ export const deleteClient = async (clientId: string) => {
     await deleteDoc(doc(db, "clients", clientId));
     console.log(`Client ID ${clientId} has been deleted.`);
   } catch (error) {
-    console.error("Error deleting client:", error);
+    if (error instanceof Error) {
+      if (error.message.includes('Network')) {
+        console.error("Network error: Unable to delete client.");
+      } else {
+        console.error("Error deleting client:", error.message);
+      }
+    } else {
+      console.error("Unknown error deleting client", error);
+    }
   }
 };
 
@@ -85,6 +123,14 @@ export const updateClient = async (clientId: string, updatedData: Partial<Client
     await updateDoc(clientRef, updatedData);
     console.log(`Client ${clientId} has been updated.`);
   } catch (error) {
-    console.error("Error updating client:", error);
+    if (error instanceof Error) {
+      if (error.message.includes('Network')) {
+        console.error("Network error: Unable to update client.");
+      } else {
+        console.error("Error updating client:", error.message);
+      }
+    } else {
+      console.error("Unknown error updating client", error);
+    }
   }
 };

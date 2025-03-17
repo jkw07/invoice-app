@@ -23,6 +23,7 @@ export const addCompany = async (company: {
   };
   email: string;
   phone: string;
+  seller: string;
 }) => {
   const user = auth.currentUser;
   if (!user) throw new Error("User not logged in");
@@ -32,7 +33,15 @@ export const addCompany = async (company: {
       userId: user.uid,
     });
   } catch (error) {
-    console.error("Error adding company: ", error);
+    if (error instanceof Error) {
+      if (error.message.includes('Network')) {
+        console.error("Network error: Unable to reach the server.");
+      } else {
+        console.error("Error adding company: ", error.message);
+      }
+    } else {
+      console.error("Unknown error adding company", error);
+    }
   }
 };
 
@@ -55,11 +64,19 @@ export const getCompany = async () => {
     city: data.city || "",
     email: data.email || "",
     phone: data.phone || "",
+    seller: data.seller || "",
   };
 });
   } catch (error) {
-    console.error("Error getting company: ", error);
-    return [];
+    if (error instanceof Error) {
+      if (error.message.includes('Network')) {
+        console.error("Network error: Unable to reach the server.");
+      } else {
+        console.error("Error getting company: ", error.message);
+      }
+    } else {
+      console.error("Unknown error getting company", error);
+    }
   }
 };
 
@@ -69,6 +86,14 @@ export const updateCompany = async (companyId: string, updatedData: Partial<Comp
     await updateDoc(companyRef, updatedData);
     console.log(`Company ${companyId} has been updated.`);
   } catch (error) {
-    console.error("Error updating company:", error);
+    if (error instanceof Error) {
+      if (error.message.includes('Network')) {
+        console.error("Network error: Unable to reach the server.");
+      } else {
+        console.error("Error updating company: ", error.message);
+      }
+    } else {
+      console.error("Unknown error updating company", error);
+    }
   }
 };
