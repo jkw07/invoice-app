@@ -2,38 +2,53 @@ import { IconButton, Tooltip } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import { Edit, Trash2 } from "lucide-react";
 
-export const tableColsClients = ({
-  handleDeleteClient,
-  handleGoToEditClientForm,
+export const tableColsProducts = ({
+  handleDeleteProduct,
+  handleGoToEditProductForm,
 }: {
-  handleDeleteClient: (id: string) => void;
-  handleGoToEditClientForm: (id: string) => void;
+  handleDeleteProduct: (id: string) => void;
+  handleGoToEditProductForm: (id: string) => void;
 }) => {
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 100 },
     {
       field: "name",
       headerName: "Nazwa",
-      width: 200,
+      width: 220,
     },
     {
-      field: "taxId",
-      headerName: "NIP",
+      field: "unitOfMeasuer",
+      headerName: "Jedn. miary",
+      width: 100,
+    },
+    {
+      field: "pkwiu",
+      headerName: "PKWiU",
+      width: 120,
+    },
+    {
+      field: "cn",
+      headerName: "CN",
+      width: 120,
+    },
+    {
+      field: "pkob",
+      headerName: "PKOB",
+      width: 120,
+    },
+    {
+      field: "netUnitPrice",
+      headerName: "Cena jedn. netto",
       width: 150,
     },
     {
-      field: "address",
-      headerName: "Adres",
-      width: 300,
+      field: "vatRate",
+      headerName: "Stawka VAT",
+      width: 100,
     },
     {
-      field: "email",
-      headerName: "Email",
-      width: 200,
-    },
-    {
-      field: "phone",
-      headerName: "Telefon",
+      field: "grossUnitPrice",
+      headerName: "Cena jedn. brutto",
       width: 150,
     },
     {
@@ -51,7 +66,7 @@ export const tableColsClients = ({
           >
             <Tooltip title="Edytuj">
               <IconButton
-                onClick={() => handleGoToEditClientForm(params.row.id)}
+                onClick={() => handleGoToEditProductForm(params.row.id)}
                 aria-label="Edit"
               >
                 <Edit className="edit-button" />
@@ -59,7 +74,7 @@ export const tableColsClients = ({
             </Tooltip>
             <Tooltip title="Usuń">
               <IconButton
-                onClick={() => handleDeleteClient(params.row.id)}
+                onClick={() => handleDeleteProduct(params.row.id)}
                 aria-label="Delete"
               >
                 <Trash2 className="delete-button" />

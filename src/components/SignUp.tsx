@@ -20,26 +20,39 @@ interface SignUpProps {
 }
 
 export const SignUp = ({ open, handleClose }: SignUpProps) => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [state, setState] = useState({
+    email: "",
+    password: "",
+    showPassword: false,
+  });
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setState((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const togglePasswordVisibility = () => {
+    setState((prev) => ({ ...prev, showPassword: !prev.showPassword }));
+  };
 
   const handleRegister = async () => {
+    setLoading(true);
     try {
-      await registerUser(email, password);
+      await registerUser(state.email, state.password);
       handleClose();
     } catch (error) {
       console.error("Registration failed: ", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     handleRegister();
-  };
-
-  const togglePasswordVisibility = () => {
-    setShowPassword((prev) => !prev);
   };
 
   return (
@@ -73,26 +86,26 @@ export const SignUp = ({ open, handleClose }: SignUpProps) => {
           fullWidth
           autoComplete="email"
           autoFocus
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={state.email}
+          onChange={handleChange}
         />
         <TextField
           label="Hasło"
           margin="normal"
           name="password"
-          type={showPassword ? "text" : "password"}
+          type={state.showPassword ? "text" : "password"}
           variant="outlined"
           autoComplete="current-password"
           required
           fullWidth
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={state.password}
+          onChange={handleChange}
           slotProps={{
             input: {
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton onClick={togglePasswordVisibility} edge="end">
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                    {state.showPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>
               ),
@@ -103,7 +116,7 @@ export const SignUp = ({ open, handleClose }: SignUpProps) => {
       <DialogActions sx={{ pb: 3, px: 3 }}>
         <Button onClick={handleClose}>Anuluj</Button>
         <Button variant="contained" type="submit">
-          Załóż konto
+          {loading ? "Zakładanie konta..." : "Załóż konto"}
         </Button>
       </DialogActions>
     </Dialog>

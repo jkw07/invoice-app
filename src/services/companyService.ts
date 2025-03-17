@@ -6,7 +6,24 @@ import { Company } from "../modules/settings/types";
 const auth = getAuth();
 const companiesCollection = collection(db, "companies");
 
-export const addCompany = async (company: { fullName: string; shortName: string; taxId: string; address: string; zipCode: string, city: string, email: string; phone: string }) => {
+export const addCompany = async (company: {
+  fullName: string;
+  shortName: string;
+  tin: string; // NIP
+  bin: string; // REGON
+  address: {
+    street: string;
+    buildingNumber: string;
+    apartmentNumber?: string;
+    zipCode: string;
+    city: string;
+    province: string; // Województwo
+    county: string; // Powiat
+    municipality: string; // Gmina
+  };
+  email: string;
+  phone: string;
+}) => {
   const user = auth.currentUser;
   if (!user) throw new Error("User not logged in");
   try {
@@ -31,7 +48,8 @@ export const getCompany = async () => {
     id: doc.id,
     fullName: data.fullName || "",
     shortName: data.shortName || "",
-    taxId: data.taxId || "",
+    tin: data.tin || "",
+    bin: data.bin || "",
     address: data.address || "",
     zipCode: data.zipCode || "",
     city: data.city || "",

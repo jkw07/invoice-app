@@ -22,10 +22,10 @@ const handleDeleteClient = async (id: string) => {
     await deleteClient(id); 
     deleteClientsData(id); 
   } catch (error) {
-    console.error('Błąd przy usuwaniu klienta:', error);
+    console.error('Error deleting client:', error);
   }
 };
 
 
-    return {handleEditClient, handleDeleteClient, handleGoToEditClientForm}
+  return {handleEditClient, handleDeleteClient, handleGoToEditClientForm}
 }

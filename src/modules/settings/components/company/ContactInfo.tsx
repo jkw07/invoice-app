@@ -1,22 +1,20 @@
-import { Box, Button, CircularProgress, TextField } from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
 import { useState } from "react";
 import { Company } from "../../types";
 
-interface BasicInfoProps {
+interface ContactInfoProps {
   handleSave: () => void;
   handleCancel: () => void;
-  isLoading: boolean;
   formData: Company;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const BasicInfo = ({
+export const ContactInfo = ({
   handleSave,
   handleCancel,
-  isLoading,
   formData,
   handleChange,
-}: BasicInfoProps) => {
+}: ContactInfoProps) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const handleEdit = () => {
@@ -35,12 +33,7 @@ export const BasicInfo = ({
 
   return (
     <Box>
-      {isLoading && (
-        <Box sx={{ display: "flex" }}>
-          <CircularProgress />
-        </Box>
-      )}
-      <h3>Dane podstawowe</h3>
+      <h3>Dane kontaktowe</h3>
       {!isEditing && <Button onClick={handleEdit}>Edytuj</Button>}
       {isEditing && (
         <>
@@ -50,36 +43,18 @@ export const BasicInfo = ({
       )}
       <Box>
         <TextField
-          label="Nazwa firmy"
-          name="fullName"
-          value={formData.fullName}
+          label="Email"
+          name="email"
+          value={formData.email}
           onChange={handleChange}
           disabled={!isEditing}
           fullWidth
           margin="normal"
         />
         <TextField
-          label="Skrót nazwy"
-          name="shortName"
-          value={formData.shortName}
-          onChange={handleChange}
-          disabled={!isEditing}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="NIP"
-          name="tin"
-          value={formData.tin}
-          onChange={handleChange}
-          disabled={!isEditing}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="REGON"
-          name="bin"
-          value={formData.bin}
+          label="Telefon"
+          name="phone"
+          value={formData.phone}
           onChange={handleChange}
           disabled={!isEditing}
           fullWidth

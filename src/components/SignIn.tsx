@@ -9,6 +9,7 @@ import {
   FormControlLabel,
   Link,
   Divider,
+  Alert,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
@@ -19,13 +20,17 @@ import { SignUp } from "./SignUp";
 import { loginUser } from "../services/authService";
 
 export const SignIn = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const [state, setState] = useState({
+    email: "",
+    password: "",
+    showPassword: false,
+  });
   const [rememberMe, setRememberMe] = useState(false);
   const [forgotPasswordDialogOpen, setForgotPasswordDialogOpen] =
     useState(false);
   const [signUpOpen, setSignUpOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [loginAlert, setLoginAlert] = useState<string | null>(null);
   const { goToInvoicesModule } = useNavigation();
 
   const handleOpenPasswordReminder = () => {
@@ -45,15 +50,32 @@ export const SignIn = () => {
   };
 
   const togglePasswordVisibility = () => {
-    setShowPassword((prev) => !prev);
+    setState((prev) => ({ ...prev, showPassword: !prev.showPassword }));
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setState((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
   const handleLogin = async () => {
+    setLoading(true);
+    setLoginAlert(null);
     try {
-      await loginUser(email, password);
+      await loginUser(state.email, state.password);
       goToInvoicesModule();
     } catch (error) {
       console.error("Login failed: ", error);
+      setLoginAlert("Błąd logowania: nieprawidłowy email lub hasło");
+      setState({
+        email: "",
+        password: "",
+        showPassword: false,
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -76,6 +98,7 @@ export const SignIn = () => {
           <img src={logo} alt="logo"></img>
         </div>
         <h2>Logowanie do programu Faktury</h2>
+        {loginAlert !== null && <Alert severity="error">{loginAlert}</Alert>}
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
           <TextField
             required
@@ -87,27 +110,27 @@ export const SignIn = () => {
             autoComplete="email"
             type="email"
             autoFocus
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={state.email}
+            onChange={handleChange}
           />
 
           <TextField
             label="Hasło"
             margin="normal"
             name="password"
-            type={showPassword ? "text" : "password"}
+            type={state.showPassword ? "text" : "password"}
             variant="outlined"
             autoComplete="current-password"
             required
             fullWidth
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={state.password}
+            onChange={handleChange}
             slotProps={{
               input: {
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton onClick={togglePasswordVisibility} edge="end">
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                      {state.showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
                 ),
@@ -130,7 +153,7 @@ export const SignIn = () => {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Zaloguj
+            {loading ? "Logowanie..." : "Zaloguj"}
           </Button>
         </Box>
         <Box sx={{ mt: 1 }}>

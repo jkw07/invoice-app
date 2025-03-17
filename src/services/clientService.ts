@@ -83,8 +83,8 @@ export const updateClient = async (clientId: string, updatedData: Partial<Client
   try {
     const clientRef = doc(db, "clients", clientId);
     await updateDoc(clientRef, updatedData);
-    console.log(`Klient ${clientId} zaktualizowany.`);
+    console.log(`Client ${clientId} has been updated.`);
   } catch (error) {
-    console.error("Błąd podczas aktualizacji klienta:", error);
+    console.error("Error updating client:", error);
   }
 };

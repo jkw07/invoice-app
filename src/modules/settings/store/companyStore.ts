@@ -9,11 +9,22 @@ interface CompanyStore {
 }
 
 export const useCompanyStore = create<CompanyStore>((set) => ({
-  companyData: {id: "",
+  companyData: {
+    id: "",
     fullName: "",
     shortName: "",
-    taxId: "",
-    address: "",
+    tin: "",
+    bin: "",
+    address: {
+    street: "",
+    buildingNumber: "",
+    apartmentNumber: "",
+    zipCode: "",
+    city: "",
+    province: "",
+    county: "", 
+    municipality: "",
+  },
     zipCode: "",
     city: "",
     email: "",

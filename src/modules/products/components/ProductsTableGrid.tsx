@@ -3,49 +3,50 @@ import { plPL } from "@mui/x-data-grid/locales";
 import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import { filterData } from "../../../utils/filterData";
-import { getClients } from "../../../services/clientService";
-import { useClientsStore } from "../store/clientsStore";
-import { useClientsActions } from "../hooks/useClientsActions";
-import { tableColsClients } from "./tableCols";
+import { getProducts } from "../../../services/productService";
+import { useProductsStore } from "../store/productsStore";
+import { useProductsActions } from "../hooks/useProductsActions";
+import { tableColsProducts } from "./TableCols";
 
-export const ClientsTableGrid = () => {
-  const { handleDeleteClient, handleGoToEditClientForm } = useClientsActions();
-  const columns = tableColsClients({
-    handleDeleteClient,
-    handleGoToEditClientForm,
+export const ProductsTableGrid = () => {
+  const { handleDeleteProduct, handleGoToEditProductForm } =
+    useProductsActions();
+  const columns = tableColsProducts({
+    handleDeleteProduct,
+    handleGoToEditProductForm,
   });
   const {
-    clientsData,
+    productsData,
     filteredData,
     searchText,
     setFilteredData,
-    setClientsData,
-  } = useClientsStore();
+    setProductsData,
+  } = useProductsStore();
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const fetchClients = async () => {
+    const fetchProducts = async () => {
       setIsLoading(true);
       try {
-        const clients = await getClients();
-        setClientsData(clients);
+        const products = await getProducts();
+        setProductsData(products);
       } catch (error) {
-        console.error("Error fetching clients:", error);
+        console.error("Error fetching products:", error);
       } finally {
         setIsLoading(false);
       }
     };
-    fetchClients();
-  }, [setClientsData]);
+    fetchProducts();
+  }, [setProductsData]);
 
   useEffect(() => {
     if (searchText.trim() === "") {
-      setFilteredData(clientsData);
+      setFilteredData(productsData);
     } else {
-      const filtered = filterData(clientsData, searchText);
+      const filtered = filterData(productsData, searchText);
       setFilteredData(filtered);
     }
-  }, [searchText, clientsData, setFilteredData]);
+  }, [searchText, productsData, setFilteredData]);
 
   return (
     <>

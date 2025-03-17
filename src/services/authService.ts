@@ -1,10 +1,9 @@
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updatePassword, updateEmail, sendPasswordResetEmail} from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updatePassword, updateEmail, sendPasswordResetEmail, EmailAuthProvider, reauthenticateWithCredential, deleteUser} from "firebase/auth";
 import { db } from "./firebaseConfig";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { deleteDoc, doc, getDoc, setDoc } from "firebase/firestore";
 import { useUserStore } from "../store/currentUserStore";
 
 const auth = getAuth();
-console.log("🔍 Firebase Auth użytkownik:", auth.currentUser);
 
 export const registerUser = async (email: string, password: string) => {
   try {
@@ -82,7 +81,7 @@ export const updateUserEmail = async (newEmail: string) => {
   }
 };
 
-// Aktualizacja hasła użytkownika
+
 export const updateUserPassword = async (newPassword: string) => {
   const user = auth.currentUser;
   if (!user) throw new Error("User not logged in");
@@ -101,6 +100,27 @@ export const resetPassword = async (email: string) => {
     console.log(`E-mail do resetowania hasła wysłany na: ${email}`);
   } catch (error) {
     console.error("Błąd podczas resetowania hasła:", error);
+    throw error;
+  }
+};
+
+export const deleteUserAccount = async (password: string) => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+  if (!user) throw new Error("User not logged in");
+  try {
+    const credential = EmailAuthProvider.credential(user.email as string, password);
+    await reauthenticateWithCredential(user, credential);
+    await deleteDoc(doc(db, "users", user.uid));
+    await deleteUser(user);
+    useUserStore.getState().setUser(null);
+    console.log("User account has been deleted");
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Error deleting user:", error.message);
+    } else {
+      console.error("Error deleting user:", error);
+    }
     throw error;
   }
 };

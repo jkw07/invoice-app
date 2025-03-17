@@ -1,9 +1,8 @@
-import { Box, Button, Divider } from "@mui/material";
+import { Button, Box, Divider } from "@mui/material";
 import { useState } from "react";
-import { DeleteAccount } from "./user/DeleteAccount";
-import { UserInfo } from "./user/UserInfo";
+import { BasicSettings } from "./reminders/BasicSettings";
 
-export const UserSettings = () => {
+export const RemindersSettings = () => {
   const [activeSection, setActiveSection] = useState("basic");
 
   const handleButtonClick = (section: string) => {
@@ -18,28 +17,19 @@ export const UserSettings = () => {
       }}
     >
       <Box sx={{ width: "300px", textAlign: "left", alignItems: "flex-start" }}>
-        <h2>Ustawienia konta</h2>
+        <h2>Powiadomienia</h2>
         <Button
           fullWidth
           variant={activeSection === "basic" ? "outlined" : "text"}
           onClick={() => handleButtonClick("basic")}
           sx={{ justifyContent: "flex-start" }}
         >
-          Dane dostępowe
-        </Button>
-        <Button
-          fullWidth
-          variant={activeSection === "delete" ? "outlined" : "text"}
-          onClick={() => handleButtonClick("delete")}
-          sx={{ marginTop: 2, justifyContent: "flex-start" }}
-        >
-          Usuń konto
+          Ustawienia powiadomień
         </Button>
       </Box>
       <Divider orientation="vertical" flexItem sx={{ marginX: 2 }} />
       <Box sx={{ flex: 1, paddingLeft: 3 }}>
-        {activeSection === "basic" && <UserInfo />}
-        {activeSection === "delete" && <DeleteAccount />}
+        {activeSection === "basic" && <BasicSettings />}
       </Box>
     </Box>
   );
